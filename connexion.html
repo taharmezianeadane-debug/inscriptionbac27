@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+    <link rel="stylesheet" href="formulaire.css">
+    <link rel="icon" type="image/png" href="photo du site/logo.png"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <section class="big_box">
+        <div class="logo">
+            <img src="logo.png" alt="logo" class="logo-im">
+            <h1>CHAOTIC .educ </h1>
+        </div>
+
+        <div class="paragra">
+            <h1>INSCRIPTION</h1>
+            <p>Ces inscriptions sont nécessaires pour vous accéder aux formations chez <strong>Mr ADANE Tahar meziane </strong></p>
+        </div>
+
+        <form id="inscriptionForm"> 
+            
+            <div class="ligne">
+                <div>
+                    <label for="nom"><i class="fa-solid fa-user"></i> NOM:</label>
+                    <input type="text" id="nom" name="nom" required>
+                </div>
+                <div>
+                    <label for="prenom"><i class="fa-solid fa-user"></i> Prénom:</label>
+                    <input type="text" id="prenom" name="prenom" required>
+                </div>
+                <div>
+                    <label for="date_naissance"><i class="fa-solid fa-calendar"></i> Date de naissance:</label>
+                    <input type="date" id="date_naissance" name="date_naissance" required>
+                </div>
+            </div>
+
+            <div class="ligne">
+                <div>
+                    <label for="telephone"><i class="fa-solid fa-phone"></i> Tel:</label>
+                    <input type="number" id="telephone" name="telephone" required>
+                </div>
+                <div>
+                    <label for="email"><i class="fa-solid fa-envelope"></i> Gmail:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div>
+                    <label for="reseaux"><i class="fa-brands fa-facebook"></i> Réseaux:</label>
+                    <input type="text" id="reseaux" name="reseaux" required>
+                </div>
+            </div>
+
+            <div class="ligne">
+                <div>
+                    <label for="niveau"><i class="fa-solid fa-graduation-cap"></i> Niveau:</label>
+                    <select id="niveau" name="niveau" required>
+                        <option value="">-- Choisir --</option>
+                        <option value="lycee">Lycée</option>
+                        <option value="universite">Université</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="annee"><i class="fa-solid fa-book"></i> Année d'étude:</label>
+                    <select id="annee" name="annee" required>
+                        <option value="">-- Choisir --</option>
+                        <option value="terminal">Terminal</option>
+                       
+                    </select>
+                </div>
+                 <div>
+                    <label for="password"><i class="fa-solid fa-lock"></i> Filiére : </label>
+                    <select id="filiere" name="filiere" required>
+                        <option value="">-- Choisir --</option>
+                        <option value="formation">Scientifique </option>
+                        <option value="cours">Génie (théq-Maths) </option>
+                       </select>
+                </div>
+                
+            </div>
+
+            <div class="ligne">
+                <div>
+                    <label for="interet"><i class="fa-solid fa-star"></i> Intérêt:</label>
+                    <select id="interet" name="interet" required>
+                        <option value="">-- Choisir --</option>
+                        <option value="formation">Formation</option>
+                        <option value="cours">Cours de soutient </option>
+                       
+                    </select>
+                </div>
+              
+            </div>
+
+            <div class="btn">
+                <button type="submit" id="submitButton">ENREGISTRER</button>
+            </div>
+        </form>
+    </section>
+
+    <script>
+      
+
+    // =====================================================
+    // URL GOOGLE APPS SCRIPT
+    // =====================================================
+
+    const scriptURL =
+        'https://script.google.com/macros/s/AKfycbx9En6_dvLIp7Sxe7eX_jjbtKlXjZSJeD3L83QDqzbw3tvkQkhrqlSsVvhIU9xp_TzX/exec';
+
+
+    // =====================================================
+    // RÉCUPÉRATION DES ÉLÉMENTS HTML
+    // =====================================================
+
+    const form = document.getElementById('inscriptionForm');
+    const submitButton = document.getElementById('submitButton');
+
+
+    // =====================================================
+    // SOUMISSION DU FORMULAIRE
+    // =====================================================
+
+    form.addEventListener('submit', e => {
+
+        // Empêche le rechargement de la page
+        e.preventDefault();
+
+
+        // =================================================
+        // RÉCUPÉRATION DES VALEURS
+        // =================================================
+
+        const nom =
+            document.getElementById('nom').value.trim();
+
+        const prenom =
+            document.getElementById('prenom').value.trim();
+
+        const dateNaissance =
+            document.getElementById('date_naissance').value;
+
+        const telephone =
+            document.getElementById('telephone').value.trim();
+
+        const email =
+            document.getElementById('email').value.trim();
+
+        const reseaux =
+            document.getElementById('reseaux').value.trim();
+
+        const niveau =
+            document.getElementById('niveau').value;
+
+        const annee =
+            document.getElementById('annee').value;
+
+        const filiere =
+            document.getElementById('filiere').value;
+
+        const interet =
+            document.getElementById('interet').value;
+
+
+        // =================================================
+        // EXPRESSIONS RÉGULIÈRES
+        // =================================================
+
+        // Gmail uniquement
+        const emailRegex =
+            /^[a-zA-Z0-9._%+-]+@gmail\.com$/i;
+
+
+        // Téléphone algérien
+        // 05xxxxxxxx
+        // 06xxxxxxxx
+        // 07xxxxxxxx
+        const telephoneRegex =
+            /^(05|06|07)[0-9]{8}$/;
+
+
+        // =================================================
+        // VALIDATION DU NOM
+        // =================================================
+
+        if (nom === '') {
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Nom manquant',
+                text: 'Veuillez entrer votre nom.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#d33'
+            });
+
+            return;
+        }
+
+
+        // =================================================
+        // VALIDATION DU PRÉNOM
+        // =================================================
+
+        if (prenom === '') {
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Prénom manquant',
+                text: 'Veuillez entrer votre prénom.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#d33'
+            });
+
+            return;
+        }
+
+
+        // =================================================
+        // VALIDATION DATE DE NAISSANCE
+        // =================================================
+
+        if (dateNaissance === '') {
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Date de naissance manquante',
+                text: 'Veuillez entrer votre date de naissance.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#d33'
+            });
+
+            return;
+        }
+
+
+        // =================================================
+        // VALIDATION DU TÉLÉPHONE
+        // =================================================
+
+        if (!telephoneRegex.test(telephone)) {
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Numéro de téléphone invalide',
+                text: 'Veuillez entrer un numéro algérien valide à 10 chiffres commençant par 05, 06 ou 07. Exemple : 0550123456',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#d33'
+            });
+
+            return;
+        }
+
+
+        // =================================================
+        // VALIDATION DU GMAIL
+        // =================================================
+
+        if (!emailRegex.test(email)) {
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Gmail invalide',
+                text: 'Veuillez entrer une adresse Gmail valide. Exemple : exemple@gmail.com',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#d33'
+            });
+
+            return;
+        }
+
+
+        // =================================================
+        // VALIDATION DES RÉSEAUX
+        // =================================================
+
+        if (reseaux === '') {
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Réseaux sociaux manquants',
+                text: 'Veuillez indiquer votre réseau social.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#d33'
+            });
+
+            return;
+        }
+
+
+        // =================================================
+        // VALIDATION DU NIVEAU
+        // =================================================
+
+        if (niveau === '') {
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Niveau manquant',
+                text: 'Veuillez sélectionner votre niveau.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#d33'
+            });
+
+            return;
+        }
+
+
+        // =================================================
+        // VALIDATION DE L'ANNÉE
+        // =================================================
+
+        if (annee === '') {
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Année d\'étude manquante',
+                text: 'Veuillez sélectionner votre année d\'étude.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#d33'
+            });
+
+            return;
+        }
+
+
+        // =================================================
+        // VALIDATION DE LA FILIÈRE
+        // =================================================
+
+        if (filiere === '') {
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Filière manquante',
+                text: 'Veuillez sélectionner votre filière.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#d33'
+            });
+
+            return;
+        }
+
+
+        // =================================================
+        // VALIDATION DE L'INTÉRÊT
+        // =================================================
+
+        if (interet === '') {
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Intérêt manquant',
+                text: 'Veuillez sélectionner votre intérêt.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#d33'
+            });
+
+            return;
+        }
+
+
+        // =================================================
+        // TOUT EST CORRECT
+        // ON DÉSACTIVE LE BOUTON
+        // =================================================
+
+        submitButton.disabled = true;
+
+        submitButton.textContent = 'ENREGISTREMENT...';
+
+
+        // =================================================
+        // RÉCUPÉRATION DE TOUTES LES DONNÉES
+        // =================================================
+
+        const requestBody = new FormData(form);
+
+
+        // =================================================
+        // ENVOI VERS GOOGLE APPS SCRIPT
+        // =================================================
+
+        fetch(scriptURL, {
+
+            method: 'POST',
+
+            body: requestBody
+
+        })
+
+
+        // =================================================
+        // RÉCUPÉRATION DE LA RÉPONSE
+        // =================================================
+
+        .then(response => {
+
+            const contentType =
+                response.headers.get('content-type');
+
+
+            if (
+                contentType &&
+                contentType.indexOf('application/json') !== -1
+            ) {
+
+                return response.json();
+
+            } else {
+
+                throw new Error(
+                    'Réponse inattendue. Vérifiez le script Google Apps Script et son déploiement.'
+                );
+
+            }
+
+        })
+
+
+        // =================================================
+        // TRAITEMENT DE LA RÉPONSE
+        // =================================================
+
+        .then(data => {
+
+
+            // =============================================
+            // SUCCÈS
+            // =============================================
+
+            if (
+                data &&
+                data.result === 'success'
+            ) {
+
+                // Réinitialiser le formulaire
+                form.reset();
+
+
+                // Message de succès
+                Swal.fire({
+
+                    icon: 'success',
+
+                    title: 'Inscription réussie !',
+
+                    text:
+                        'Votre inscription a bien été enregistrée. Nous vous contacterons prochainement.',
+
+                    confirmButtonText: 'Parfait !',
+
+                    confirmButtonColor: '#3085d6',
+
+                    background: '#ffffff',
+
+                    allowOutsideClick: false
+
+                });
+
+            }
+
+
+            // =============================================
+            // ERREUR GOOGLE APPS SCRIPT
+            // =============================================
+
+            else if (
+                data &&
+                data.result === 'error'
+            ) {
+
+                Swal.fire({
+
+                    icon: 'error',
+
+                    title: 'Erreur d\'enregistrement',
+
+                    text:
+                        data.message ||
+                        'Une erreur est survenue lors de l\'enregistrement.',
+
+                    confirmButtonText: 'Réessayer',
+
+                    confirmButtonColor: '#d33'
+
+                });
+
+            }
+
+
+            // =============================================
+            // RÉPONSE INATTENDUE
+            // =============================================
+
+            else {
+
+                Swal.fire({
+
+                    icon: 'warning',
+
+                    title: 'Réponse inattendue',
+
+                    text:
+                        'Le serveur a retourné une réponse inattendue.',
+
+                    confirmButtonText: 'OK',
+
+                    confirmButtonColor: '#3085d6'
+
+                });
+
+            }
+
+        })
+
+
+        // =================================================
+        // ERREUR DE CONNEXION
+        // =================================================
+
+        .catch(error => {
+
+            console.error(
+                'Erreur de connexion/réseau :',
+                error
+            );
+
+
+            Swal.fire({
+
+                icon: 'error',
+
+                title: 'Erreur de connexion',
+
+                text:
+                    'Impossible de communiquer avec le serveur. Vérifiez votre connexion puis réessayez.',
+
+                confirmButtonText: 'Réessayer',
+
+                confirmButtonColor: '#d33'
+
+            });
+
+        })
+
+
+        // =================================================
+        // FIN DE LA REQUÊTE
+        // =================================================
+
+        .finally(() => {
+
+            // Réactiver le bouton
+            submitButton.disabled = false;
+
+            // Restaurer le texte original
+            submitButton.textContent = 'ENREGISTRER';
+
+        });
+
+    });
+
+</script> 
+</body>
+</html>
